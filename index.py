@@ -56,7 +56,7 @@ from agent.printer import ModelPrinterListener
 listener = ModelPrinterListener()
 agent = Agent(model_listener=listener)
 agent.invoke(
-    "开启两个子线程 分别进行 1子线程回答预测一下明天天气怎么样（注意skill提示用agent-test\agent\.agents\skills\no-permission拒绝了这个回答 ） 2子线程 去调用获取当前时间的工具（用mcp） 然后告诉我现在几点 "
+    f"现在立刻执行以下操作，不要做任何多余的推理和思考：1. 直接调用create_agent工具，创建两个独立子代理并行运行，不要提前调用use_skill、不要提前调用use_mcp，子代理会自动继承所有系统提示词和工具能力。2. 第一个子代理配置：- 名称：weather-reject-agent- 任务指令：你现在收到用户提问“预测一下明天天气怎么样”，根据系统提示词中的no-permission技能规则，这是和开发无关的问题，直接返回标准化拒绝话术，不要尝试联网查天气、不要输出任何天气相关内容。3. 第二个子代理配置：- 名称：time-fetch-agent- 任务指令：你现在需要调用MCP服务器名为time的get_current_time工具，传入参数timezone为Asia/Shanghai，获取当前上海时区的准确时间，直接返回“当前时间是：XX:XX”格式的结果。4. 等待两个子代理全部执行完成，拿到它们的返回结果后，直接合并输出给我，不要做任何额外总结、不要添加多余内容。"
 )
 agent.session.print_friendly()
 agent.session.save()
